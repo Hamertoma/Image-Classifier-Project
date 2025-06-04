@@ -1,7 +1,0 @@
-SET,IMAGE_PATH,LABEL
-TRAIN,gs://normalvschestxraydif/Chest Xrays/IM-0001-0001.jpeg,chest_xray
-TRAIN,gs://normalvschestxraydif/Random/img_random_002.jpeg,not_chest_xray
-TRAIN,gs://normalvschestxraydif/Random/img_random_001.jpeg,not_chest_xray
-TRAIN,gs://normalvschestxraydif/Chest Xrays/IM-0003-0001.jpeg,chest_xray
-VALIDATION,gs://normalvschestxraydif/Random/img_random_003.jpeg,not_chest_xray
-TEST,gs://normalvschestxraydif/Chest Xrays/person101_bacteria_483.jpeg,chest_xray
