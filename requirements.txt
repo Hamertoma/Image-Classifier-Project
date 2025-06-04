@@ -1,0 +1,5 @@
+streamlit
+Pillow
+google-cloud
+protobuf>=3.20
+grpcio>=1.32
