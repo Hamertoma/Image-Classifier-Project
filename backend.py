@@ -52,7 +52,7 @@ with tab1:
 
     if uploaded_file is not None:
         # Read file as bytes once
-        image_bytes = uploaded_file.read()
+        original_bytes = uploaded_file.read()
 
         if len(original_bytes) > 1_572_864:
             st.warning("Image is too large — compressing before upload...")
