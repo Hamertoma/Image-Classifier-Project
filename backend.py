@@ -24,22 +24,19 @@ if creds_json is None:
     st.error("Environment variable for credentials not found.")
     st.stop()
 
-# Vertex AI project settings
+# ✅ Vertex AI project settings
 PROJECT_ID = "x-ray-classification-458602"
 REGION = "us-central1"
 ENDPOINT_ID = "8720672022100705280"
-
-# Premodel Tester
 CHEST_VALIDATOR_ENDPOINT_ID = "8864998316409094144"
+
+# ✅ Initialize Vertex AI once before calling any endpoints
+aiplatform.init(project=PROJECT_ID, location=REGION, credentials=credentials)
+
+# ✅ Initialize both endpoints AFTER aiplatform.init
+endpoint = aiplatform.Endpoint(endpoint_name=ENDPOINT_ID)
 chest_validator_endpoint = aiplatform.Endpoint(endpoint_name=CHEST_VALIDATOR_ENDPOINT_ID)
 
-
-# Initialize Vertex AI endpoint
-aiplatform.init(project=PROJECT_ID, location=REGION, credentials=credentials)
-endpoint = aiplatform.Endpoint(endpoint_name=ENDPOINT_ID)
-
-
-endpoint = aiplatform.Endpoint(endpoint_name=ENDPOINT_ID)
 
 # Streamlit page settings
 tab1, tab2 = st.tabs(["🔍 Chest X-ray Classifier", "📘 About & Disclaimer"])
@@ -82,11 +79,11 @@ with tab1:
                 response = endpoint.predict(instances=[{"content": image_b64}])
                 predictions = response.predictions[0]
 
-    st.success("✅ Prediction complete!")
+            st.success("✅ Prediction complete!")
 
 
             # Display predictions
-for label, score in zip(predictions["displayNames"], predictions["confidences"]):
+            for label, score in zip(predictions["displayNames"], predictions["confidences"]):
                 if score >= 0.15:
                     st.write(f"**{label}**: {score:.1%}")
                     st.markdown("""
