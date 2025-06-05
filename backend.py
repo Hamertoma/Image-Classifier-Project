@@ -71,10 +71,9 @@ with tab1:
                 confidence_dict = dict(zip(
                     validation_predictions["displayNames"],
                     validation_predictions["confidences"],
-                    st.json(validation_predictions)
 
             ))
-                chest_confidence = confidence_dict.get("Chest X-ray", 0.0)
+                chest_confidence = confidence_dict.get("Chest_Xray", 0.0)
 
                 st.write(f"🧠 **Chest X-ray Confidence**: {chest_confidence:.2%}")
 
