@@ -78,19 +78,23 @@ with tab1:
                 st.write(f"🧠 **Chest X-ray Confidence**: {chest_confidence:.2%}")
 
                 if chest_confidence < 0.8:
-                    st.warning("⚠️ This image has a low probability of being a chest X-ray. Proceeding may yield inaccurate results.")
+                    st.markdown("""
+<span style='color:#ffae42; font-size:24px; font-weight:bold;'>⚠️ Warning:</span>  
+This image has a low probability of being a chest X-ray. Proceeding may yield inaccurate results.
+""", unsafe_allow_html=True)
 
+        
         # Step 2: Run classification model
             with st.spinner("Sending image to the classification model..."):
                 response = endpoint.predict(instances=[{"content": image_b64}])
                 predictions = response.predictions[0]
 
-            st.success("✅ Prediction complete!")
+            st.write("✅ Prediction complete!")
 
         # Display predictions above 15%
             for label, score in zip(predictions["displayNames"], predictions["confidences"]):
                 if score >= 0.15:
-                    st.write(f"**{label}**: {score:.1%}")
+                    st.success(f"**{label}**: {score:.1%}")
 
         st.markdown("""
 ---
