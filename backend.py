@@ -70,7 +70,9 @@ with tab1:
             # Extract confidence score for "Chest X-ray"
                 confidence_dict = dict(zip(
                     validation_predictions["displayNames"],
-                    validation_predictions["confidences"]
+                    validation_predictions["confidences"],
+                    st.json(validation_predictions)
+
             ))
                 chest_confidence = confidence_dict.get("Chest X-ray", 0.0)
 
