@@ -12,7 +12,7 @@ st.set_page_config(page_title="Chest X-Ray Classifier", layout="centered")
 import json
 from google.oauth2 import service_account
 
-if st.experimental_get_query_params().get("health") == ["true"]:
+if st.query_params.get("health") == ["true"]:
     st.write("ok")
     st.stop()
 # Check if the environment variable is set
