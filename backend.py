@@ -9,7 +9,16 @@ import os
 st.set_page_config(page_title="Chest X-Ray Classifier", layout="centered")
 
 # Set Google Cloud credentials
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = r"C:\Users\khali\OneDrive\Desktop\Image Processing\x-ray-classification-458602-59618b99b5aa.json"
+import json
+from google.oauth2 import service_account
+
+if st.experimental_get_query_params().get("health") == ["true"]:
+    st.write("ok")
+    st.stop()
+# Check if the environment variable is set
+
+# Load credentials from environment variable (set in Render.com dashboard)
+credentials = service_account.Credentials.from_service_account_file("/etc/secrets/gcp-key.json")
 
 # Vertex AI project settings
 PROJECT_ID = "x-ray-classification-458602"
@@ -17,7 +26,10 @@ REGION = "us-central1"
 ENDPOINT_ID = "8720672022100705280"
 
 # Initialize Vertex AI endpoint
-aiplatform.init(project=PROJECT_ID, location=REGION)
+aiplatform.init(project=PROJECT_ID, location=REGION, credentials=credentials)
+endpoint = aiplatform.Endpoint(endpoint_name=ENDPOINT_ID)
+
+
 endpoint = aiplatform.Endpoint(endpoint_name=ENDPOINT_ID)
 
 # Streamlit page settings
