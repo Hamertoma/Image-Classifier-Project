@@ -54,6 +54,21 @@ with tab1:
         # Read file as bytes once
         image_bytes = uploaded_file.read()
 
+        if len(original_bytes) > 1_572_864:
+            st.warning("Image is too large — compressing before upload...")
+
+            # Open and compress the image
+            image = Image.open(io.BytesIO(original_bytes)).convert("RGB")
+            image.thumbnail((512, 512))  # Resize while keeping aspect ratio
+
+            buffer = io.BytesIO()
+            image.save(buffer, format="JPEG", quality=85)
+            image_bytes = buffer.getvalue()
+        else:
+            image_bytes = original_bytes
+            image = Image.open(io.BytesIO(image_bytes))
+
+
         # Display the image using PIL
         image = Image.open(io.BytesIO(image_bytes))
         st.image(image, caption="Uploaded X-ray", use_container_width=True)
