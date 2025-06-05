@@ -17,8 +17,12 @@ if st.experimental_get_query_params().get("health") == ["true"]:
     st.stop()
 # Check if the environment variable is set
 
-# Load credentials from environment variable (set in Render.com dashboard)
-credentials = service_account.Credentials.from_service_account_file("/etc/secrets/gcp-key.json")
+creds_json = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS_JSON")
+credentials = service_account.Credentials.from_service_account_info(json.loads(creds_json))
+
+if creds_json is None:
+    st.error("Environment variable for credentials not found.")
+    st.stop()
 
 # Vertex AI project settings
 PROJECT_ID = "x-ray-classification-458602"
