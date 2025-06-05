@@ -29,6 +29,11 @@ PROJECT_ID = "x-ray-classification-458602"
 REGION = "us-central1"
 ENDPOINT_ID = "8720672022100705280"
 
+# Premodel Tester
+CHEST_VALIDATOR_ENDPOINT_ID = "8864998316409094144"
+chest_validator_endpoint = aiplatform.Endpoint(endpoint_name=CHEST_VALIDATOR_ENDPOINT_ID)
+
+
 # Initialize Vertex AI endpoint
 aiplatform.init(project=PROJECT_ID, location=REGION, credentials=credentials)
 endpoint = aiplatform.Endpoint(endpoint_name=ENDPOINT_ID)
@@ -57,18 +62,31 @@ with tab1:
         st.image(image, caption="Uploaded X-ray", use_container_width=True)
 
         if st.button("🔍 Analyze Image"):
-            with st.spinner("Sending image to the model..."):
-                # Encode image to base64
+            with st.spinner("Checking if this is a chest X-ray..."):
+        # Encode image to base64
                 image_b64 = base64.b64encode(image_bytes).decode("utf-8")
 
-                # Make prediction
+        # Run chest-vs-random model
+                validation_response = chest_validator_endpoint.predict(instances=[{"content": image_b64}])
+                validation_predictions = validation_response.predictions[0]
+
+        # Assuming the model returns something like {"displayNames": ["Chest X-ray", "Not a Chest X-ray"], "confidences": [0.98, 0.02]}
+                chest_confidence = dict(zip(validation_predictions["displayNames"], validation_predictions["confidences"])).get("Chest X-ray", 0)
+
+                if chest_confidence < 0.8:
+                    st.error("❌ This image does not appear to be a chest X-ray. Please upload a valid X-ray image.")
+                    st.stop()
+
+            with st.spinner("Sending image to the classification model..."):
+        # Main model prediction
                 response = endpoint.predict(instances=[{"content": image_b64}])
                 predictions = response.predictions[0]
 
-            st.success("✅ Prediction complete!")
+    st.success("✅ Prediction complete!")
+
 
             # Display predictions
-            for label, score in zip(predictions["displayNames"], predictions["confidences"]):
+for label, score in zip(predictions["displayNames"], predictions["confidences"]):
                 if score >= 0.15:
                     st.write(f"**{label}**: {score:.1%}")
                     st.markdown("""
@@ -86,7 +104,7 @@ By using this site, you acknowledge that results may be inaccurate or misleading
 
 
             # Optional warning for low-confidence results
-            if max(predictions["confidences"]) < 0.6:
+if max(predictions["confidences"]) < 0.6:
                 st.warning("⚠️ Low confidence prediction — this image may not be a chest X-ray.")
 
 with tab2:
