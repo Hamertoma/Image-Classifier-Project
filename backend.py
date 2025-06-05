@@ -5,7 +5,7 @@ import io
 from google.cloud import aiplatform
 import os
 
-# ✅ Set page config FIRST
+# Set page config FIRST
 st.set_page_config(page_title="Chest X-Ray Classifier", layout="centered")
 
 # Set Google Cloud credentials
@@ -24,16 +24,16 @@ if creds_json is None:
     st.error("Environment variable for credentials not found.")
     st.stop()
 
-# ✅ Vertex AI project settings
+# Vertex AI project settings
 PROJECT_ID = "x-ray-classification-458602"
 REGION = "us-central1"
 ENDPOINT_ID = "8720672022100705280"
 CHEST_VALIDATOR_ENDPOINT_ID = "8864998316409094144"
 
-# ✅ Initialize Vertex AI once before calling any endpoints
+# Initialize Vertex AI once before calling any endpoints
 aiplatform.init(project=PROJECT_ID, location=REGION, credentials=credentials)
 
-# ✅ Initialize both endpoints AFTER aiplatform.init
+# Initialize both endpoints AFTER aiplatform.init
 endpoint = aiplatform.Endpoint(endpoint_name=ENDPOINT_ID)
 chest_validator_endpoint = aiplatform.Endpoint(endpoint_name=CHEST_VALIDATOR_ENDPOINT_ID)
 
@@ -93,9 +93,21 @@ with tab1:
                 st.write(f"🧠 **Chest X-ray Confidence**: {chest_confidence:.2%}")
 
                 if chest_confidence < 0.8:
-                    st.markdown("""
-<span style='color:#ffae42; font-size:24px; font-weight:bold;'>⚠️ Warning:</span>  
-This image has a low probability of being a chest X-ray. Proceeding may yield inaccurate results.
+                        st.markdown("""
+<div style='
+    background-color:#fff3cd;
+    color:#856404;
+    border-left: 8px solid #ffa500;
+    padding: 16px;
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 6px;
+    margin-bottom: 20px;
+'>
+⚠️ <span style='font-size: 26px;'>Warning</span><br><br>
+This image has a <u>low probability</u> of being a chest X-ray.<br>
+<strong>Proceeding may yield inaccurate results.</strong>
+</div>
 """, unsafe_allow_html=True)
 
         
