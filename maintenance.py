@@ -8,7 +8,8 @@ with tab1:
 <div style='text-align: center; padding-top: 100px;'>
     <h1 style='font-size: 3em;'>🛠️ We're Updating Things</h1>
     <p style='font-size: 1.5em;'>Our Chest X-ray AI tool is currently undergoing maintenance.</p>
-    <p style='font-size: 1.2em;'>Please check back later while we make improvements to serve you better.</p>
+    <p style='font-size: 1.2em;'>Please check back later while we make improvements to serve you better.</p> 
+    <p style='font-size: 1.2em;'>For any questions in the meantime, please email khalidsm2004@gmail.com. </p>
 </div>
 """, unsafe_allow_html=True)
 with tab2:
